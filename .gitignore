@@ -306,3 +306,5 @@ OpenCover/
 
 # LiteDB
 .db
+/test/TestData
+/*.db
