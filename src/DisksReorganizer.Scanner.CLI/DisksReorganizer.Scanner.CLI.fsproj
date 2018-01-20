@@ -7,7 +7,6 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="4.*" />
-    <PackageReference Include="LiteDB.FSharp" Version="1.*" />
+    <ProjectReference Include="..\DisksReorganizer.Common\DisksReorganizer.Common.fsproj" />
   </ItemGroup>
 </Project>

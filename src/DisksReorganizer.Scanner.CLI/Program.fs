@@ -3,17 +3,8 @@ open System.IO
 open System.Security.Cryptography
 open LiteDB
 open LiteDB.FSharp
+open DisksReorganizer.Common
 
-type File = {
-    Id: Guid
-    Name: string
-    Extension: string
-    Hash: string
-    Size: int64
-    SourceName: string
-    Source: string
-    Path: string
-}
 let clearHash (s:string) = s.Replace("-", "").ToLower()
 let computeHash (f:FileInfo) = File.ReadAllBytes(f.FullName) |> SHA1.Create().ComputeHash |> BitConverter.ToString |> clearHash
 let fileInfoToFile (f:FileInfo, sourceName:string, source:string) : File = {

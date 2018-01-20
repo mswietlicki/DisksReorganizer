@@ -8,4 +8,8 @@
     <Compile Include="Library.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="LiteDB" Version="4.*" />
+    <PackageReference Include="LiteDB.FSharp" Version="1.*" />
+  </ItemGroup>
 </Project>

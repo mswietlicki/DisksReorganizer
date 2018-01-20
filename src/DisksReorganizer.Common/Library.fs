@@ -1,5 +1,13 @@
 namespace DisksReorganizer.Common
+open System
 
-module Say =
-    let hello name =
-        printfn "Hello %s" name
+type File = {
+    Id: Guid
+    Name: string
+    Extension: string
+    Hash: string
+    Size: int64
+    SourceName: string
+    Source: string
+    Path: string
+}
