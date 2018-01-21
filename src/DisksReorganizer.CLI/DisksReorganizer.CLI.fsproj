@@ -4,13 +4,10 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DisksReorganizer.Common\DisksReorganizer.Common.fsproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
 </Project>
