@@ -25,12 +25,17 @@ let main argv =
     let mapper = FSharpBsonMapper()
     use db = new LiteDatabase("DisksReorganizer.db", mapper)
     let filesColl = db.GetCollection<File>()
-    printfn "Loading files..."
-    filesColl.FindAll()
-        |> Seq.groupBy (fun f -> f.Hash)
-        |> Seq.filter (fun (g,fs) -> fs.Count() > 1)
-        |> Seq.map (fun (g,fs) -> (g,fs.ToArray()))
-        |> Seq.iter (fun (g,fs) -> 
-            printDuplicatedFiles(g, fs)
-            giveOptionToDeleteFile(fs, filesColl))
+
+    filesColl.Find(Query.All("Size", Query.Descending), 0, 100).OrderByDescending(fun f -> f.Size)
+        |> Seq.indexed
+        |> Seq.iter (fun (i, f) -> printfn "%d. File [%s] %s (%.2f Mb)" (i) f.SourceName f.Path ((float f.Size) / 1024.0 / 1024.0))
+
+    //printfn "Loading files..."
+    //filesColl.FindAll()
+    //    |> Seq.groupBy (fun f -> f.Hash)
+    //    |> Seq.filter (fun (g,fs) -> fs.Count() > 1)
+    //    |> Seq.map (fun (g,fs) -> (g,fs.ToArray()))
+    //    |> Seq.iter (fun (g,fs) -> 
+    //        printDuplicatedFiles(g, fs)
+    //        giveOptionToDeleteFile(fs, filesColl))
     0

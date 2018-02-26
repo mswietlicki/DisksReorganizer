@@ -1,6 +1,11 @@
 namespace DisksReorganizer.Common
 open System
 
+type Hash = {
+    Id: Guid
+    Hash: string
+}
+
 type File = {
     Id: Guid
     Name: string
