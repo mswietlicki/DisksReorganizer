@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.CommandLine.IO;
 using System.IO;
 
 namespace DysksOrganizer.CLI
@@ -9,32 +10,63 @@ namespace DysksOrganizer.CLI
     {
         static int Main(string[] args)
         {
-            var rootCommand = new RootCommand
+            var greeting = new Command("greeting", "Say hi.")
             {
-                new Option<int>(
-                    "--int-option",
-                    getDefaultValue: () => 42,
-                    description: "An option whose argument is parsed as an int"),
-                new Option<bool>(
-                    "--bool-option",
-                    "An option whose argument is parsed as a bool"),
-                new Option<FileInfo>(
-                    "--file-option",
-                    "An option whose argument is parsed as a FileInfo")
+                new Argument<string>("name", "Your name."),
+                new Option<string?>(new[] { "--greeting", "-g" }, "The greeting to use."),
+                new Option(new[] { "--verbose", "-v" }, "Show the deets."),
             };
 
-            rootCommand.Description = "My sample app";
+            greeting.Handler = CommandHandler.Create<string, string?, bool, IConsole>(HandleGreeting);
 
-            // Note that the parameters of the handler method are matched according to the names of the options
-            rootCommand.Handler = CommandHandler.Create<int, bool, FileInfo>((intOption, boolOption, fileOption) =>
-             {
-                 Console.WriteLine($"The value for --int-option is: {intOption}");
-                 Console.WriteLine($"The value for --bool-option is: {boolOption}");
-                 Console.WriteLine($"The value for --file-option is: {fileOption?.FullName ?? "null"}");
-             });
+            var cmd = new RootCommand
+            {
+                greeting
+            };
 
-            // Parse the incoming args and invoke the handler
-            return rootCommand.InvokeAsync(args).Result;
+            return cmd.Invoke(args);
         }
+
+        static void HandleGreeting(string name, string? greeting, bool verbose, IConsole console)
+        {
+            if (verbose)
+                console.Out.WriteLine($"About to say hi to '{name}'...");
+
+            greeting ??= "Hi";
+            console.Out.WriteLine($"{greeting} {name}!");
+
+            if (verbose)
+                console.Out.WriteLine($"All done!");
+        }
+    }
+
+    public class Disk
+    {
+        public string Name { get; set; }
+        public long Size { get; set; }
+        public string Description { get; set; }
+        public int Manufacture { get; set; }
+        public string SerialNumber { get; set; }
+    }
+
+    public class FileSource
+    {
+        public string Name { get; set; }
+        public SourcePath Path { get; set; }
+    }
+
+    public class SourcePath
+    {
+        public string Path { get; set; }
+    }
+
+    public class File
+    {
+        public string Name { get; set; }
+        public long Size { get; set; }
+        public string Hash { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime LastWriteTime { get; set; }
+        public SourcePath Path { get; set; }
     }
 }
